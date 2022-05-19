@@ -106,6 +106,8 @@ allocproc(void)
 
 found:
   p->pid = allocpid();
+  p->traced = 0;
+  p->trace_mask = 0;
 
   // Allocate a trapframe page.
   if((p->trapframe = (struct trapframe *)kalloc()) == 0){
@@ -292,6 +294,9 @@ fork(void)
   safestrcpy(np->name, p->name, sizeof(p->name));
 
   pid = np->pid;
+
+  np->traced = p->traced;
+  np->trace_mask = p->trace_mask;
 
   np->state = RUNNABLE;
 
